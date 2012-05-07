@@ -4,17 +4,33 @@ function appender(message) {
   }));
 }
 
+// Passing variables by value.
 
-var globalHello = "Hello, I am the \"globalHello\" variable. My context is global. Look for me on the window.";
+var globalString = "Hello, I am the \"globalString\" variable. My context is global. Look for me on the window.";
 
-appender(globalHello);
+appender(globalString);
+
+(function (globalString) {
+  appender(globalString);
+  
+  globalString = "Cheerio, my text is local. You won\'t find me in your Inspector!";
+  appender('local: ' + globalString);
+}(globalString));
+
+appender(globalString);
+
+// Passing variables by reference.
+
+var globalObject = {text: 'Hi, this is the global Object'};
+
+appender(globalObject.text);
 
 // This is our proto-plugin.
-(function (globalHello) {
-  appender(globalHello);
+(function (globalObject) {
+  appender(globalObject.text);
   
-  var globalHello = "Cheerio, my text is local. You won\'t find me in your Inspector!";
-  appender('local hello: ' + globalHello);
-}(globalHello));
+  globalObject.text = "Cheerio, this is the local Object.";
+  appender('local: ' + globalObject.text);
+}(globalObject));
 
-appender(globalHello);
+appender(globalObject.text);
